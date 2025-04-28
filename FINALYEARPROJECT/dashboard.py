@@ -6,8 +6,12 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score
 from xgboost import XGBClassifier
+<<<<<<< Updated upstream
 import os
 import streamlit as st
+=======
+st.set_page_config(page_title="Bitcoin Price Dashboard", layout="centered")
+>>>>>>> Stashed changes
 
 st.write("📁 Current Working Directory:", os.getcwd())
 
@@ -97,7 +101,7 @@ def backtest(data, model, predictors, start=1095, step=150):
 
 # Main Dashboard
 def main():
-    st.set_page_config(page_title="Bitcoin Price Dashboard", layout="centered")
+    
     st.markdown("# 📈 Bitcoin Price Prediction Dashboard")
 
     btc = load_data()
