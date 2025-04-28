@@ -110,7 +110,7 @@ def main():
         st.info("Click the button to fetch the live price.")
 
     # Merge with Sentiment Data (Optional)
-    wiki_path = "FINALYEARPROJECT/wikipedia_and_news_edits.csv"
+    wiki_path = "wikipedia_and_news_edits.csv"
     if os.path.exists(wiki_path):
         wiki = pd.read_csv(wiki_path, index_col=0, parse_dates=True)
         btc.index = btc.index.tz_localize(None)
