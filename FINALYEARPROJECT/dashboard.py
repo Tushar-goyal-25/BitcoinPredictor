@@ -8,16 +8,6 @@ from sklearn.metrics import precision_score
 from xgboost import XGBClassifier
 import os
 import streamlit as st
-
-st.set_page_config(page_title="Bitcoin Price Dashboard", layout="centered")
-
-
-st.write("📁 Current Working Directory:", os.getcwd())
-
-st.write("📄 Files in this folder:")
-files = os.listdir()
-for file in files:
-    st.write("-", file)
 # Load Data
 @st.cache_data
 def load_data():
