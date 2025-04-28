@@ -106,7 +106,12 @@ def main():
     if os.path.exists(wiki_path):
         wiki = pd.read_csv(wiki_path, index_col=0, parse_dates=True)
         btc.index = btc.index.tz_localize(None)
-        btc = btc.merge(wiki, left_index=True, right_index=True)
+        if "edit_count" in wiki.columns:
+            btc = btc.merge(wiki, left_index=True, right_index=True)
+        else:
+            st.warning("⚠️ Sentiment data file loaded but missing expected columns like 'edit_count'. Skipping merge.")
+    else:
+        st.warning("⚠️ Sentiment data file 'wikipedia_and_news_edits.csv' not found. Skipping merge.")
 
     btc = add_features(btc)
 
