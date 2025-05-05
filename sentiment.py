@@ -49,7 +49,7 @@ edits_df = edits_df.reindex(dates, fill_value=0)
 edits_df = edits_df.astype(float)
 
 # Step 2: Load Bitcoin news sentiments from your CSV
-news_df = pd.read_csv("/Users/tushar/Desktop/UNI/FinalYEARProject/ytcode/bitcoin_sentiments_21_24.csv")  # Adjust path if needed
+news_df = pd.read_csv("bitcoin_sentiments_21_24.csv")  # Adjust path if needed
 news_df["Date"] = pd.to_datetime(news_df["Date"])
 
 # Aggregate daily sentiment
