@@ -104,7 +104,7 @@ def main():
     else:
         st.info("Click the button to fetch the live price.")
 
-    # Merge with Sentiment Data (Optional)
+    # Merge with Sentiment Data 
     wiki_path = "../wikipedia_and_news_edits.csv"
     if os.path.exists(wiki_path):
         wiki = pd.read_csv(wiki_path, index_col=0, parse_dates=True)

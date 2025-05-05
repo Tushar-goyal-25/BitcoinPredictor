@@ -59,7 +59,7 @@ print(precision_score(test["target"], preds))
 
 
 
-def predict(train,test,predictors,model):
+def predict(train,test,predictors,model): #prediction code 
     model.fit(train[predictors], train["target"],eval_set=[(test[predictors], test["target"])],verbose=False)
     preds = model.predict(test[predictors])
     preds = pd.Series(preds, index = test.index, name="predictions")    
@@ -67,7 +67,7 @@ def predict(train,test,predictors,model):
     combine = pd.concat([test["target"], preds],axis=1)
     return combine
 
-def backtest(data, model, predictors, start=1095, step=150):
+def backtest(data, model, predictors, start=1095, step=150): #backtest code
     all_predictions = []
     for i in range(start, data.shape[0], step):
         train = data.iloc[0:i].copy()
@@ -77,7 +77,7 @@ def backtest(data, model, predictors, start=1095, step=150):
     return pd.concat(all_predictions)
 
 
-model = XGBClassifier(random_state=1, learning_rate =0.01, n_estimators= 500,eval_metric="aucpr" )
+model = XGBClassifier(random_state=1, learning_rate =0.01, n_estimators= 500,eval_metric="aucpr" ) #model defined 
 predictions = backtest(btc,model,predictors)
 
 
