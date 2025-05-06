@@ -77,18 +77,18 @@ def compute_rolling(btc):
 # Prediction & Backtesting
 def predict(train, test, predictors, model):
     model.fit(train[predictors], train["target"], eval_set=[(test[predictors], test["target"])], verbose=False)
-    preds = model.predict(test[predictors])
-    preds = pd.Series(preds, index=test.index, name="predictions")
-    return pd.concat([test["target"], preds], axis=1)
+    predictions = model.predict(test[predictors])
+    predictions = pd.Series(predictions, index=test.index, name="predictions")
+    return pd.concat([test["target"], predictions], axis=1)
 
-def backtest(data, model, predictors, start=1095, step=150):
-    all_predictions = []
-    for i in range(start, data.shape[0], step):
+def backtest(data, model, predictors, index=1095, step=150):
+    prediction_list = []
+    for i in range(index, data.shape[0], step):
         train = data.iloc[0:i]
         test = data.iloc[i:i+step]
         predictions = predict(train, test, predictors, model)
-        all_predictions.append(predictions)
-    return pd.concat(all_predictions)
+        prediction_list.append(predictions)
+    return pd.concat(prediction_list)
 
 # Main Dashboard
 def main():

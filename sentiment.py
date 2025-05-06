@@ -8,38 +8,39 @@ from datetime import datetime
 # Set up Wikipedia site and page
 site = mwclient.Site("en.wikipedia.org")
 page = site.pages["Bitcoin"]
-revs = list(page.revisions())
-revs = sorted(revs, key=lambda rev: rev["timestamp"])
+revisons = list(page.revisions())
+revisons = sorted(revs, day=lambda rev: rev["timestamp"])
 
 # Set up Huggingface Sentiment Analysis pipeline
 sentiment_pipeline = pipeline("sentiment-analysis")
 
 def find_sentiment(text):
-    sent = sentiment_pipeline([text[:250]])[0]
-    score = sent["score"]
-    if sent["label"] == "NEGATIVE":
-        score *= -1
-    return score
+    snippet = text[:250]
+    result = sentiment_pipeline([snippet])[0]
+    sentiment_score = result["score"]
+    if result["label"] == "NEGATIVE":
+        sentiment_score = -sentiment_score
+    return sentiment_score
 
 # Wikipedia edits sentiment
 edits = {}
 
-for rev in revs:
+for revison in revisons:
     date = time.strftime("%Y-%m-%d", rev["timestamp"])
     if date not in edits:
         edits[date] = dict(sentiments=[], edit_count=0)
     edits[date]["edit_count"] += 1
-    comment = rev.get("comment", "")
+    comment = revison.get("comment", "")
     edits[date]["sentiments"].append(find_sentiment(comment))
 
-for key in edits:
-    if len(edits[key]["sentiments"]) > 0:
-        edits[key]["sentiment"] = mean(edits[key]["sentiments"])
-        edits[key]["neg_sentiment"] = len([s for s in edits[key]["sentiments"] if s < 0]) / len(edits[key]["sentiments"])
+for day in edits:
+    if len(edits[day]["sentiments"]) > 0:
+        edits[day]["sentiment"] = mean(edits[day]["sentiments"])
+        edits[day]["neg_sentiment"] = len([s for s in edits[day]["sentiments"] if s < 0]) / len(edits[day]["sentiments"])
     else:
-        edits[key]["sentiment"] = 0
-        edits[key]["neg_sentiment"] = 0
-    del edits[key]["sentiments"]
+        edits[day]["sentiment"] = 0
+        edits[day]["neg_sentiment"] = 0
+    del edits[day]["sentiments"]
 
 # Create DataFrame from Wikipedia data
 edits_df = pd.DataFrame.from_dict(edits, orient="index")
@@ -48,7 +49,7 @@ dates = pd.date_range(start="2009-03-08", end=datetime.today())
 edits_df = edits_df.reindex(dates, fill_value=0)
 edits_df = edits_df.astype(float)
 
-# Step 2: Load Bitcoin news sentiments from your CSV
+# Load Bitcoin news sentiments from your CSV
 news_df = pd.read_csv("bitcoin_sentiments_21_24.csv")  # Adjust path if needed
 news_df["Date"] = pd.to_datetime(news_df["Date"])
 
